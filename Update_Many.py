@@ -1,25 +1,22 @@
 import os
 import pymysql
 
-#lesson:  Connecting To MySQL From Python
-
-# Get username from gitpod workspace
+# Get the username from the Cloud9 workspace
 # (modify this variable if running on another environment)
 username = os.getenv('C9_USER')
 
 # Connect to the database
 connection = pymysql.connect(host='localhost',
                              user=username,
-                             password='NO',
+                             password='',
                              db='Chinook')
-
 try:
-    # Run a query
     with connection.cursor() as cursor:
-        sql = "SELECT * FROM Artist;"
-        cursor.execute(sql)
-        result = cursor.fetchall()
-        print(result)
+        rows = [(23, 'bob'),
+                (24, 'jim'),
+                (25, 'fred')]
+        cursor.executemany("UPDATE Friends SET age = %s WHERE name = %s;",
+                           rows)
+        connection.commit()
 finally:
-    # Close the connection, regardless of whether or not the above was successful
     connection.close()
